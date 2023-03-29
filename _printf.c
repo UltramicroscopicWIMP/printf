@@ -1,15 +1,22 @@
 #include "main.h"
 
+/**
+*_printf - prints formatted arguments to stdout
+*@format: Format specifier
+*@...: optional arguments
+*
+*Return: int. Returns size of output buffer
+*/
 int _printf(const char *format, ...)
 {
-	char *buffer, *alias;
+	char *buffer, *alias, *stringize;
 	int length = bufLen(format);
 	int size = 0, i = 0;
 	char specifier;
-	char* token = malloc(2);
+	char *token = malloc(2);
 	va_list nxt_param;
 
-	buffer = NULL;
+	buffer = NULL, stringize = NULL;
 	va_start(nxt_param, format);
 	while (i < length)
 	{
@@ -42,7 +49,16 @@ int _printf(const char *format, ...)
 					buffer = _concat(buffer, token);
 					break;
 				case 's':
-					buffer = _concat(buffer, va_arg(nxt_param, char*));
+					stringize = va_arg(nxt_param, char*);
+					buffer = _concat(buffer, stringize);
+					break;
+				case 'd':
+					stringize = to_string(va_arg(nxt_param, int));
+					buffer = _concat(buffer, stringize);
+					break;
+				case 'i':
+					stringize = to_string(va_arg(nxt_param, int));
+					buffer = _concat(buffer, stringize);
 					break;
 				default:
 					buffer = "Error: expected specifier-list";
